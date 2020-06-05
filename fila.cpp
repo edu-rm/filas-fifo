@@ -27,7 +27,8 @@ typedef struct sElemento{
 // bool empty(Queue* queue);
 // int size(Queue* queue);
 // void insert(Queue* queue, int dado);
-void insertLe(Queue* queue, Elemento* pivo);
+void insertLe(Queue* queue, int dado);
+Queue* criaFila();
 
 // int remove(Queue* queue);
 
@@ -35,20 +36,25 @@ void insertLe(Queue* queue, Elemento* pivo);
 
 
 int main(){
-    Queue *queue = (Queue*)malloc(sizeof(Queue));
-    queue->front->dado = 0;
-    // Assim que eu inserir um elemento esse rear passa a ser 0
-    queue->rear->dado = -1;
+    Queue *queue = criaFila();
 
-
-    // A quantidade de elemtos que possui um a fila é sempre: q->rear - q->front + 1
-
-    // Considerar a possibilidade de fazer o deslocamento dos elementos do vetor
-    // para o começo dele, isso quando o rear atingir 100 (objetivando evitar overflow)
-
+    insertLe(queue, 20);
+    insertLe(queue, 30);
+    insertLe(queue, 40);
 
 
     return 0;
+}
+
+Queue* criaFila()  {
+    Queue *queue = (Queue*)malloc(sizeof(Queue));
+    Elemento* front = (Elemento*)malloc(sizeof(Elemento));
+    front->dado = 0;
+    Elemento* rear= (Elemento*)malloc(sizeof(Elemento));
+    front->dado = -1;
+    queue->front = front;
+    queue->rear = rear;
+    return queue;
 }
 
 bool empty(Queue* queue) {
@@ -70,7 +76,7 @@ void insertLe(Queue* queue, int dado){
     novo->dado = dado;
     novo->prev = queue->rear;
     novo->next = NULL;
-    
+
     queue->rear = novo;
 }
 
@@ -83,3 +89,11 @@ void insertLe(Queue* queue, int dado){
 // }
 
 
+
+// Assim que eu inserir um elemento esse rear passa a ser 0
+
+
+// A quantidade de elemtos que possui um a fila é sempre: q->rear - q->front + 1
+
+// Considerar a possibilidade de fazer o deslocamento dos elementos do vetor
+// para o começo dele, isso quando o rear atingir 100 (objetivando evitar overflow)
