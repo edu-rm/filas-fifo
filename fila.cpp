@@ -31,7 +31,7 @@ void insertLe(Queue* queue, int dado);
 Queue* criaFila();
 void imprime(Queue* queue);
 
-// int remove(Queue* queue);
+void remove(Queue* queue);
 
 
 
@@ -42,6 +42,12 @@ int main(){
     insertLe(queue, 20);
     insertLe(queue, 30);
     insertLe(queue, 40);
+    remove(queue);    
+    remove(queue);
+    remove(queue);
+    remove(queue);
+    remove(queue);
+
 
     imprime(queue);
 
@@ -81,12 +87,8 @@ void insertLe(Queue* queue, int dado){
     novo->dado = dado;
 
     if(queue->size == 0){
-        // novo->prev = NULL;
-        // novo->next = NULL;
-
         queue->front = novo;
         queue->rear = novo;
-
     }else{
         if (queue->size == 1){
             novo->prev = queue->front;
@@ -102,6 +104,25 @@ void insertLe(Queue* queue, int dado){
     } 
 
     queue->size++;
+}
+
+void remove(Queue* queue){
+    if( queue->size == 0) {
+        printf("\nA lista já está vazia\n");
+    }else{
+        if( queue->size == 1) {
+            printf("\nElemento %d removido\n", queue->front->dado);
+            free(queue->front);
+        }else {
+            Elemento* remover = (Elemento*)malloc(sizeof(Elemento));
+            remover= queue->front;
+            queue->front = queue->front->next;
+            printf("\nElemento %d removido\n", remover->dado);
+            free(remover);
+        }
+        queue->size--;
+    }
+
 }
 
 void imprime(Queue* queue){
