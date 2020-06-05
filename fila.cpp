@@ -64,18 +64,22 @@ void insert(Queue* queue, int dado){
     // queue->items[++quear->rear] = dado
 }
 
-void insertLe(Queue* queue, Elemento* pivo){
+void insertLe(Queue* queue, int dado){
     // Para se inserir teria de receber o elemento pivo como tail
-
-    if ( pivo != queu)
+    Elemento* novo = (Elemento*)malloc(sizeof(Elemento));
+    novo->dado = dado;
+    novo->prev = queue->rear;
+    novo->next = NULL;
+    
+    queue->rear = novo;
 }
 
 
-int remove(Queue* queue){
-    int x = queue->items[queue->front++];
+// int remove(Queue* queue){
+//     int x = queue->items[queue->front++];
 
-    printf("\nElemento %d removido com sucesso\n", x);
-    return x;
-}
+//     printf("\nElemento %d removido com sucesso\n", x);
+//     return x;
+// }
 
 
