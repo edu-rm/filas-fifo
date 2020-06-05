@@ -114,8 +114,7 @@ void remove(Queue* queue){
             printf("\nElemento %d removido\n", queue->front->dado);
             free(queue->front);
         }else {
-            Elemento* remover = (Elemento*)malloc(sizeof(Elemento));
-            remover= queue->front;
+            Elemento* remover = queue->front;
             queue->front = queue->front->next;
             printf("\nElemento %d removido\n", remover->dado);
             free(remover);
