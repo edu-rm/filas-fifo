@@ -9,3 +9,34 @@ typedef struct sCarro{
   struct sCarro *prev;
   int placa;
 } Carro;
+
+Estacionamento* criaEstacionamento();
+
+void estacionarCarro(Estacionamento* est, int placa);
+void verEstacionamento(Estacionamento* queue);
+
+void liberarVaga(Estacionamento* est, Carro* carro );
+
+
+int main (){
+
+    
+
+
+
+
+
+
+    return 0;
+}
+
+
+Estacionamento* criaEstacionamento(){
+    Estacionamento *est = (Estacionamento*)malloc(sizeof(Estacionamento));
+
+    est->front = NULL;
+    est->rear = NULL;
+    est->size = 0;
+    return est;
+}
+

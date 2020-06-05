@@ -58,10 +58,6 @@ int main(){
 Queue* criaFila()  {
     Queue *queue = (Queue*)malloc(sizeof(Queue));
 
-    Elemento* front = (Elemento*)malloc(sizeof(Elemento));
-
-    Elemento* rear= (Elemento*)malloc(sizeof(Elemento));
-
     queue->front = NULL;
     queue->rear = NULL;
     queue->size = 0;
