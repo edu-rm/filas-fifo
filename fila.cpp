@@ -29,6 +29,7 @@ typedef struct sElemento{
 // void insert(Queue* queue, int dado);
 void insertLe(Queue* queue, int dado);
 Queue* criaFila();
+void imprime(Queue* queue);
 
 // int remove(Queue* queue);
 
@@ -42,18 +43,22 @@ int main(){
     insertLe(queue, 30);
     insertLe(queue, 40);
 
+    imprime(queue);
+
 
     return 0;
 }
 
 Queue* criaFila()  {
     Queue *queue = (Queue*)malloc(sizeof(Queue));
+
     Elemento* front = (Elemento*)malloc(sizeof(Elemento));
-    front->dado = 0;
+
     Elemento* rear= (Elemento*)malloc(sizeof(Elemento));
-    front->dado = -1;
-    queue->front = front;
-    queue->rear = rear;
+
+    queue->front = NULL;
+    queue->rear = NULL;
+    queue->size = 0;
     return queue;
 }
 
@@ -74,11 +79,41 @@ void insertLe(Queue* queue, int dado){
     // Para se inserir teria de receber o elemento pivo como tail
     Elemento* novo = (Elemento*)malloc(sizeof(Elemento));
     novo->dado = dado;
-    novo->prev = queue->rear;
-    novo->next = NULL;
 
-    queue->rear = novo;
+    if(queue->size == 0){
+        // novo->prev = NULL;
+        // novo->next = NULL;
+
+        queue->front = novo;
+        queue->rear = novo;
+
+    }else{
+        if (queue->size == 1){
+            novo->prev = queue->front;
+            queue->front->next = novo;
+            novo->next = NULL;
+            queue->rear = novo;
+        }else {
+            novo->prev = queue->rear;
+            novo->next = NULL;
+            queue->rear->next =novo;
+            queue->rear = novo;
+        }
+    } 
+
+    queue->size++;
 }
+
+void imprime(Queue* queue){
+    Elemento* aux = (Elemento*)malloc(sizeof(Elemento));
+    aux = queue->front;
+
+    for(int i = 0; i < queue->size; i++){
+        printf("\n%d\n", aux->dado);
+        aux = aux->next;
+    }
+}
+
 
 
 // int remove(Queue* queue){
