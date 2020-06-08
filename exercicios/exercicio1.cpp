@@ -27,7 +27,7 @@ Espera* criaEspera();
 
 
 void adicionarCarroEstacionamento(Estacionamento* est, Carro* carro, Espera* espera );
-void adicionarCarroEspera(Espera *est, Carro* carro);
+void adicionarCarroEspera(Espera *espera, Carro* carro);
 void verEstacionamento(Estacionamento* queue);
 
 void liberarVaga(Estacionamento* est, Carro* carro );
@@ -40,7 +40,7 @@ int main (){
     int flag = 0;
     int placa;
     int cp ; //futura C ou P, aqui C = 0 e p = 1
-    for(int i = 0 ; i <= 11 ; i++) {
+    for(int i = 0 ; i <= 30 ; i++) {
         placa = i;
         cp = 0;
         
@@ -161,5 +161,6 @@ void adicionarCarroEspera(Espera *espera, Carro* carro){
                 printf("\nEle está la lista de espera, posição %d\n", espera->size);
 
             }
-         } 
+         }
+    espera->size++; 
 }
