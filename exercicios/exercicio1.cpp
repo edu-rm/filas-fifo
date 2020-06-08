@@ -25,6 +25,9 @@ typedef struct sCarro{
 Estacionamento* criaEstacionamento();
 Espera* criaEspera();
 
+void imprimeEstacionamento(Estacionamento* est);
+void imprimeEspera(Espera* espera);
+
 
 void adicionarCarroEstacionamento(Estacionamento* est, Carro* carro, Espera* espera );
 void adicionarCarroEspera(Espera *espera, Carro* carro);
@@ -40,7 +43,7 @@ int main (){
     int flag = 0;
     int placa;
     int cp ; //futura C ou P, aqui C = 0 e p = 1
-    for(int i = 0 ; i <= 30 ; i++) {
+    for(int i = 0 ; i <= 11 ; i++) {
         placa = i;
         cp = 0;
         
@@ -50,26 +53,9 @@ int main (){
         }
     }
 
+    imprimeEstacionamento(est);
+    imprimeEspera(espera);
 
-
-
-
-
-
-    // while(flag==0){
-    //     char acao;
-
-    //     int placa;
-    //     printf("\nc = chegada | p = partida\n");
-    //     scanf("%c", &acao);
-    //     printf("\nDigite a placa\n");
-
-    //     scanf("%d", &placa);
-
-    //     chegada(est, placa);
-
-    //     int flag = 0;
-    // }
     return 0;
 }
 Carro* novoCarro(int placa){
@@ -108,7 +94,6 @@ void adicionarCarroEstacionamento(Estacionamento *est, Carro* carro, Espera* esp
     if(est->size <= 10) {
         printf("Exite vagas disponiveis ");
 
-
         if(est->size == 0){
             est->front = carro;
             est->rear = carro;
@@ -128,7 +113,9 @@ void adicionarCarroEstacionamento(Estacionamento *est, Carro* carro, Espera* esp
                 printf("\nEle foi estacionado na posição %d\n", est->size);
 
             }
-         } 
+         }
+        est->size++;
+
     }else {
         printf("\nNão existem vagas, ele será colocado na lista de espera\n");
         adicionarCarroEspera(espera, carro);
@@ -137,7 +124,6 @@ void adicionarCarroEstacionamento(Estacionamento *est, Carro* carro, Espera* esp
 
     
 
-    est->size++;
 }
 
 void adicionarCarroEspera(Espera *espera, Carro* carro){
@@ -145,22 +131,65 @@ void adicionarCarroEspera(Espera *espera, Carro* carro){
     if(espera->size == 0){
             espera->front = carro;
             espera->rear = carro;
-            printf("\nEle está la lista de espera, posição 1\n");
+            printf("\nEle está na lista de espera, posição 1\n");
         }else{
             if (espera->size == 1){
                 carro->prev = espera->front;
                 espera->front->next = carro;
                 carro->next = NULL;
                 espera->rear = carro;
-                printf("\nEle está la lista de espera, posição 2\n");
+                printf("\nEle está na lista de espera, posição 2\n");
             }else {
                 carro->prev = espera->rear;
                 carro->next = NULL;
                 espera->rear->next =carro;
                 espera->rear = carro;
-                printf("\nEle está la lista de espera, posição %d\n", espera->size);
+                printf("\nEle está na lista de espera, posição %d\n", espera->size+1);
 
             }
          }
     espera->size++; 
 }
+
+void imprimeEstacionamento(Estacionamento* est){
+    Carro* aux = (Carro*)malloc(sizeof(Carro));
+    aux = est->front;
+    printf("\nCarros no estacionamento %d\n", est->size);
+    for(int i = 0; i < est->size; i++){
+        printf(" %d ", aux->placa);
+        aux = aux->next;
+    }
+}
+void imprimeEspera(Espera* espera){
+    Carro* aux = (Carro*)malloc(sizeof(Carro));
+    aux = espera->front;
+    printf("\nCarros na espera\n");
+
+    for(int i = 0; i < espera->size; i++){
+        printf(" %d ", aux->placa);
+        aux = aux->next;
+    }
+}
+
+
+
+
+
+
+
+
+
+    // while(flag==0){
+    //     char acao;
+
+    //     int placa;
+    //     printf("\nc = chegada | p = partida\n");
+    //     scanf("%c", &acao);
+    //     printf("\nDigite a placa\n");
+
+    //     scanf("%d", &placa);
+
+    //     chegada(est, placa);
+
+    //     int flag = 0;
+    // }
