@@ -3,6 +3,11 @@
 #include <unistd.h>
 
 
+typedef struct sEspera{
+  struct sCarro *front;
+  struct sCarro *rear;
+  int size;
+} Espera;
 
 typedef struct sEstacionamento{
   struct sCarro *front;
@@ -18,8 +23,11 @@ typedef struct sCarro{
 } Carro;
 
 Estacionamento* criaEstacionamento();
+Espera* criaEspera();
 
-void adicionarCarroEstacionamento(Estacionamento* est, Carro* carro );
+
+void adicionarCarroEstacionamento(Estacionamento* est, Carro* carro, Espera* espera );
+void adicionarCarroEspera(Espera *est, Carro* carro);
 void verEstacionamento(Estacionamento* queue);
 
 void liberarVaga(Estacionamento* est, Carro* carro );
@@ -27,16 +35,18 @@ Carro* novoCarro(int placa);
 
 int main (){
     Estacionamento* est = criaEstacionamento();
+    Espera* espera = criaEspera();
+
     int flag = 0;
     int placa;
     int cp ; //futura C ou P, aqui C = 0 e p = 1
-    for(int i = 0 ; i < 11 ; i++) {
+    for(int i = 0 ; i <= 11 ; i++) {
         placa = i;
         cp = 0;
         
         Carro* carro =novoCarro(placa);
         if(cp == 0){
-            adicionarCarroEstacionamento(est, carro);
+            adicionarCarroEstacionamento(est, carro, espera);
         }
     }
 
@@ -82,7 +92,16 @@ Estacionamento* criaEstacionamento(){
     return est;
 }
 
-void adicionarCarroEstacionamento(Estacionamento *est, Carro* carro){
+Espera* criaEspera(){
+    Espera *esp = (Espera*)malloc(sizeof(Espera));
+
+    esp->front = NULL;
+    esp->rear = NULL;
+    esp->size = 0;
+    return esp;
+}
+
+void adicionarCarroEstacionamento(Estacionamento *est, Carro* carro, Espera* espera){
     // Para se inserir teria de receber o elemento pivo como tail
 
 
@@ -111,10 +130,36 @@ void adicionarCarroEstacionamento(Estacionamento *est, Carro* carro){
             }
          } 
     }else {
-        printf("não existem vagas");
+        printf("\nNão existem vagas, ele será colocado na lista de espera\n");
+        adicionarCarroEspera(espera, carro);
+
     }
 
     
 
     est->size++;
+}
+
+void adicionarCarroEspera(Espera *espera, Carro* carro){
+
+    if(espera->size == 0){
+            espera->front = carro;
+            espera->rear = carro;
+            printf("\nEle está la lista de espera, posição 1\n");
+        }else{
+            if (espera->size == 1){
+                carro->prev = espera->front;
+                espera->front->next = carro;
+                carro->next = NULL;
+                espera->rear = carro;
+                printf("\nEle está la lista de espera, posição 2\n");
+            }else {
+                carro->prev = espera->rear;
+                carro->next = NULL;
+                espera->rear->next =carro;
+                espera->rear = carro;
+                printf("\nEle está la lista de espera, posição %d\n", espera->size);
+
+            }
+         } 
 }
