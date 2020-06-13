@@ -24,6 +24,7 @@ typedef struct sCarro{
 
 Estacionamento* criaEstacionamento();
 Espera* criaEspera();
+Carro* novoCarro(int placa);
 
 void imprimeEstacionamento(Estacionamento* est);
 void imprimeEspera(Espera* espera);
@@ -33,8 +34,10 @@ void adicionarCarroEstacionamento(Estacionamento* est, Carro* carro, Espera* esp
 void adicionarCarroEspera(Espera *espera, Carro* carro);
 void verEstacionamento(Estacionamento* queue);
 
-void liberarVaga(Estacionamento* est, Carro* carro );
-Carro* novoCarro(int placa);
+void partida(Estacionamento* est, Espera* espera, int placa );
+
+Carro* buscaEstacionamento(Estacionamento* est, int placa);
+// bool buscaEspera(Espera* espera, int placa);
 
 int main (){
     Estacionamento* est = criaEstacionamento();
@@ -42,16 +45,42 @@ int main (){
 
     int flag = 0;
     int placa;
-    int cp ; //futura C ou P, aqui C = 0 e p = 1
-    for(int i = 0 ; i <= 11 ; i++) {
-        placa = i;
-        cp = 0;
+    int placateste = 0 ;
+    int cp ; 
+    //futura C ou P, aqui C = 0 e p = 1
+    cp = 0;
+    // for(int i = 0 ; i <= 11 ; i++) {
+    //     placa = i;
         
-        Carro* carro =novoCarro(placa);
-        if(cp == 0){
-            adicionarCarroEstacionamento(est, carro, espera);
-        }
-    }
+        
+    //     if(cp == 0){
+    //         Carro* carro =novoCarro(placa);
+    //         adicionarCarroEstacionamento(est, carro, espera);
+    //     }else{
+    //         partida(est,espera, placateste);
+    //     }
+    //     if( i == 6) {
+    //         cp = 1;
+    //         placateste = 6;
+    //     }
+    // }
+    Carro* carro = novoCarro(1);
+    adicionarCarroEstacionamento(est, carro, espera );
+
+    carro = novoCarro(2);
+    adicionarCarroEstacionamento(est, carro, espera );
+
+    carro = novoCarro(3);
+    adicionarCarroEstacionamento(est, carro, espera );
+
+    carro = novoCarro(4);
+    adicionarCarroEstacionamento(est, carro, espera );
+
+    imprimeEstacionamento(est);
+
+    partida(est, espera, 3);
+    partida(est, espera, 2);
+
 
     imprimeEstacionamento(est);
     imprimeEspera(espera);
@@ -88,9 +117,6 @@ Espera* criaEspera(){
 }
 
 void adicionarCarroEstacionamento(Estacionamento *est, Carro* carro, Espera* espera){
-    // Para se inserir teria de receber o elemento pivo como tail
-
-
     if(est->size <= 10) {
         printf("Exite vagas disponiveis ");
 
@@ -129,47 +155,130 @@ void adicionarCarroEstacionamento(Estacionamento *est, Carro* carro, Espera* esp
 void adicionarCarroEspera(Espera *espera, Carro* carro){
 
     if(espera->size == 0){
-            espera->front = carro;
+        espera->front = carro;
+        espera->rear = carro;
+        printf("\nEle está na lista de espera, posição 1\n");
+    }else{
+        if (espera->size == 1){
+            carro->prev = espera->front;
+            espera->front->next = carro;
+            carro->next = NULL;
             espera->rear = carro;
-            printf("\nEle está na lista de espera, posição 1\n");
-        }else{
-            if (espera->size == 1){
-                carro->prev = espera->front;
-                espera->front->next = carro;
-                carro->next = NULL;
-                espera->rear = carro;
-                printf("\nEle está na lista de espera, posição 2\n");
-            }else {
-                carro->prev = espera->rear;
-                carro->next = NULL;
-                espera->rear->next =carro;
-                espera->rear = carro;
-                printf("\nEle está na lista de espera, posição %d\n", espera->size+1);
+            printf("\nEle está na lista de espera, posição 2\n");
+        }else {
+            carro->prev = espera->rear;
+            carro->next = NULL;
+            espera->rear->next =carro;
+            espera->rear = carro;
+            printf("\nEle está na lista de espera, posição %d\n", espera->size+1);
 
-            }
-         }
+        }
+    }
     espera->size++; 
 }
 
 void imprimeEstacionamento(Estacionamento* est){
     Carro* aux = (Carro*)malloc(sizeof(Carro));
     aux = est->front;
-    printf("\nCarros no estacionamento %d\n", est->size);
+    printf("\nESTACIONAMENTO: ");
     for(int i = 0; i < est->size; i++){
-        printf(" %d ", aux->placa);
+        printf(" %d -> ", aux->placa);
         aux = aux->next;
     }
 }
+
 void imprimeEspera(Espera* espera){
     Carro* aux = (Carro*)malloc(sizeof(Carro));
     aux = espera->front;
-    printf("\nCarros na espera\n");
-
+    printf("\nESPERA: ");
     for(int i = 0; i < espera->size; i++){
-        printf(" %d ", aux->placa);
+        printf(" %d -> ", aux->placa);
         aux = aux->next;
     }
 }
+
+// Carro* buscaEstacionamento(Estacionamento* est, int placa){
+//     Carro* aux;
+//     aux = est->front;
+
+//     for(int i = 0; i < est->size; i++){
+//         if(aux->placa == placa) {
+//             printf("\n\nO carro está no estacionamento\n\n");
+//             return aux;
+//         }
+//         aux = aux->next;
+//     }
+//     return NULL;
+// }
+
+void partida(Estacionamento* est, Espera* espera, int placa ){
+    Carro* carro;
+    carro = est->front;
+    bool estacionado;
+    for(int i = 0; i < est->size; i++){
+        if(carro->placa == placa) {
+            printf("\n\nO carro está no estacionamento\n\n");
+            estacionado=true;
+            break;
+        }
+        carro = carro->next;
+    }
+
+
+    if(estacionado){
+        printf("Entrei");
+        int flag = 0;
+        Carro* aux = 
+        aux = est->front;
+
+        while(flag == 0){
+            if(aux == carro) {
+                if(est->front != aux && est->rear != aux){
+                    aux->prev->next = aux->next;
+                    aux->next->prev = aux->prev;
+                    Carro* salvaAux = aux;
+                    aux = aux->prev;
+                    while(aux != NULL) {
+                        aux->qtdDeslocamento++;
+                        aux = aux->prev;
+                    }
+                    free(salvaAux);
+                    flag = 1;
+                }else{
+                    if(est->front == aux){
+                        aux->qtdDeslocamento++;
+                        aux->prev->next = NULL;
+                        free(aux);
+                        flag = 1; 
+                    }
+                    if(est->rear == aux){
+                        aux->prev->next = NULL;
+                        Carro* salvaAux = aux;
+                        
+
+                        while(aux != NULL) {
+                            aux->qtdDeslocamento++;
+                            aux = aux->prev;
+                        }
+
+                        free(salvaAux);
+                        flag = 1;
+                    }
+                }
+                est->size--;
+            }else{
+                aux = aux->next;
+            }
+        }
+    }else {
+        // contar um na quantidade de desolcamento 
+        carro->qtdDeslocamento++;
+        printf("Entrei aqui");
+
+    }
+
+}
+
 
 
 
