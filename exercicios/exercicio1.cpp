@@ -35,8 +35,9 @@ void adicionarCarroEspera(Espera *espera, Carro* carro);
 void verEstacionamento(Estacionamento* queue);
 
 void partida(Estacionamento* est, Espera* espera, int placa );
+void relatorio(Estacionamento* est);
 
-Carro* buscaEstacionamento(Estacionamento* est, int placa);
+// Carro* buscaEstacionamento(Estacionamento* est, int placa);
 // bool buscaEspera(Espera* espera, int placa);
 
 int main (){
@@ -78,10 +79,11 @@ int main (){
 
     imprimeEstacionamento(est);
 
-    partida(est, espera, 3);
-    partida(est, espera, 2);
+    partida(est, espera, 1);
 
+    // partida(est, espera, 4);
 
+    relatorio(est);
     imprimeEstacionamento(est);
     imprimeEspera(espera);
 
@@ -91,7 +93,7 @@ Carro* novoCarro(int placa){
     Carro* car = (Carro*)malloc(sizeof(Carro));
 
     car->placa = placa;
-    car->qtdDeslocamento = 1;
+    car->qtdDeslocamento = 0;
 
     printf("\nCarro %d criado\n", car->placa);
     return car;
@@ -247,7 +249,7 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
                 }else{
                     if(est->front == aux){
                         aux->qtdDeslocamento++;
-                        aux->prev->next = NULL;
+                        aux->next->prev = NULL;
                         free(aux);
                         flag = 1; 
                     }
@@ -260,7 +262,6 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
                             aux->qtdDeslocamento++;
                             aux = aux->prev;
                         }
-
                         free(salvaAux);
                         flag = 1;
                     }
@@ -279,7 +280,15 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
 
 }
 
+void relatorio(Estacionamento* est) {
+    Carro* aux = est->front;
 
+    for(int i = 0; i < est->size; i++){
+        printf("\n\n");
+        printf("\nCarro: %d\nDeslocamentos: %d\n\n", aux->placa, aux->qtdDeslocamento );
+        aux = aux->next;
+    }
+}
 
 
 
