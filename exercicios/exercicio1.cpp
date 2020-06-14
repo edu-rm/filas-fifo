@@ -85,7 +85,7 @@ int main (){
 
     relatorio(est);
     imprimeEstacionamento(est);
-    imprimeEspera(espera);
+    // imprimeEspera(espera);
 
     return 0;
 }
@@ -187,6 +187,7 @@ void imprimeEstacionamento(Estacionamento* est){
         printf(" %d -> ", aux->placa);
         aux = aux->next;
     }
+    printf("\n");
 }
 
 void imprimeEspera(Espera* espera){
@@ -199,19 +200,6 @@ void imprimeEspera(Espera* espera){
     }
 }
 
-// Carro* buscaEstacionamento(Estacionamento* est, int placa){
-//     Carro* aux;
-//     aux = est->front;
-
-//     for(int i = 0; i < est->size; i++){
-//         if(aux->placa == placa) {
-//             printf("\n\nO carro está no estacionamento\n\n");
-//             return aux;
-//         }
-//         aux = aux->next;
-//     }
-//     return NULL;
-// }
 
 void partida(Estacionamento* est, Espera* espera, int placa ){
     Carro* carro;
@@ -250,13 +238,15 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
                     if(est->front == aux){
                         aux->qtdDeslocamento++;
                         aux->next->prev = NULL;
+                        est->front = aux->next;
                         free(aux);
                         flag = 1; 
                     }
                     if(est->rear == aux){
                         aux->prev->next = NULL;
                         Carro* salvaAux = aux;
-                        
+                        est->rear = aux->prev;
+
 
                         while(aux != NULL) {
                             aux->qtdDeslocamento++;
