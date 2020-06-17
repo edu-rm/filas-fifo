@@ -79,7 +79,13 @@ int main (){
 
     imprimeEstacionamento(est);
 
-    partida(est, espera, 1);
+    partida(est, espera, 4);
+    partida(est, espera, 9);
+
+    partida(est, espera, 10);
+    partida(est, espera, 11);
+
+
     // partida(est, espera, 3);
 
 
@@ -206,9 +212,9 @@ void imprimeEspera(Espera* espera){
 void partida(Estacionamento* est, Espera* espera, int placa ){
     Carro* carro;
     carro = est->front;
-    bool estacionado;
+    bool estacionado =false;
     for(int i = 0; i < est->size; i++){
-        printf("%d", carro->placa);
+        printf("%d ", carro->placa);
         if(carro->placa == placa) {
             printf("\n\nO carro está no estacionamento\n\n");
             estacionado=true;
@@ -223,59 +229,64 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
         int flag = 0;
         Carro* aux ;
         aux = carro;
-        int flag = 0;
 
-        while(flag == 0){
-            if(aux == carro) {
-                if(est->front != aux && est->rear != aux){
-                    aux->prev->next = aux->next;
-                    aux->next->prev = aux->prev;
-                    Carro* salvaAux = aux;
+        if(est->front != aux && est->rear != aux){
+            aux->prev->next = aux->next;
+            aux->next->prev = aux->prev;
+            
+            Carro* salvaAux = aux;
+            salvaAux->qtdDeslocamento++;
+
+            aux = aux->prev;
+            while(aux != NULL) {
+                aux->qtdDeslocamento++;
+                aux = aux->prev;
+            }
+            free(salvaAux);
+            flag = 1;
+        }else{
+            if(est->front == aux){
+                aux->qtdDeslocamento++;
+                est->front = aux->next;
+                aux->next->prev = NULL;
+                free(aux);
+                flag = 1; 
+            }
+            if(est->rear == aux){
+                aux->prev->next = NULL;
+                est->rear = aux->prev;
+                Carro* salvaAux = aux;
+
+
+                while(aux != NULL) {
+                    aux->qtdDeslocamento++;
                     aux = aux->prev;
-                    while(aux != NULL) {
-                        aux->qtdDeslocamento++;
-                        aux = aux->prev;
-                    }
-                    free(salvaAux);
-                    flag = 1;
-                }else{
-                    if(est->front == aux){
-                        aux->qtdDeslocamento++;
-                        aux->next->prev = NULL;
-                        est->front = aux->next;
-                        free(aux);
-                        flag = 1; 
-                    }
-                    if(est->rear == aux){
-                        aux->prev->next = NULL;
-                        Carro* salvaAux = aux;
-                        est->rear = aux->prev;
-
-
-                        while(aux != NULL) {
-                            aux->qtdDeslocamento++;
-                            aux = aux->prev;
-                        }
-                        free(salvaAux);
-                        flag = 1;
-                    }
                 }
-                est->size--;
-            }else{
-                if(aux == NULL){
-                    flag= 1;
-                }
-                aux = aux->next;
+                free(salvaAux);
+                flag = 1;
             }
         }
+        est->size--;
+
     }else {
-        printf("estou aqui");
-        if(carro == NULL) {
-            printf("O carro n existe");
-        }else {
-            carro->qtdDeslocamento++;
+        bool esperando = false;
+        Carro * carro2 ;
+        carro2 = espera->front;
+        for(int i = 0; i < espera->size; i++){
+            // printf("%d ", carro->placa);
+            if(carro2->placa == placa) {
+                printf("\n\nO carro está esperando vaga\n\n");
+                esperando=true;
+                break;
+            }
+            carro2 = carro2->next;
         }
 
+        if(esperando) {
+            carro2->qtdDeslocamento++;
+        }else {
+            printf("\nO carro %d n existe\n", placa);
+        }
 
     }
 
