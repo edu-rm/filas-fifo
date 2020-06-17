@@ -349,3 +349,4 @@ void relatorio(Estacionamento* est) {
 
         //     aux = aux->prev;
         // }
+        //teste
