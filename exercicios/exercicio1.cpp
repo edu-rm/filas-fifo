@@ -36,6 +36,7 @@ void adicionarCarroEspera(Espera *espera, Carro* carro);
 
 void partida(Estacionamento* est, Espera* espera, int placa );
 void relatorio(Estacionamento* est);
+int deslocamento(Estacionamento* est, Carro* carro);
 
 // Carro* buscaEstacionamento(Estacionamento* est, int placa);
 // bool buscaEspera(Espera* espera, int placa);
@@ -100,21 +101,21 @@ int main (){
 
     imprimeEstacionamento(est);
 
-    partida(est, espera, 4);
+    // partida(est, espera, 4);
     // partida(est, espera, 9);
 
     // partida(est, espera, 10);
     // partida(est, espera, 11);
 
 
-    // partida(est, espera, 3);
+    partida(est, espera, 9);
 
 
     // partida(est, espera, 20);
 
     relatorio(est);
-    // imprimeEstacionamento(est);
-    imprimeEspera(espera);
+    imprimeEstacionamento(est);
+    // imprimeEspera(espera);
 
     return 0;
 }
@@ -258,22 +259,45 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
             aux->next->prev = aux->prev;
             
             Carro* salvaAux = aux;
-            salvaAux->qtdDeslocamento++;
+            // salvaAux->qtdDeslocamento++;
 
             aux = aux->prev;
             while(aux != NULL) {
                 aux->qtdDeslocamento++;
                 aux = aux->prev;
             }
+
+            aux = salvaAux;
+
+            do {
+                aux->qtdDeslocamento += deslocamento(est, aux);
+                if(aux == est->rear){
+                   break;
+                }
+                aux = aux->next;
+            }while(true);
+
             free(salvaAux);
             flag = 1;
         }else{
             if(est->front == aux){
-                aux->qtdDeslocamento++;
+                // aux->qtdDeslocamento++;
+                // printf("aqui");
+                Carro * carro = aux;
+                
+                while(true) {
+                    carro->qtdDeslocamento += deslocamento(est, carro);
+                    if(carro == est->rear){
+                        break;
+                    }
+                    carro = carro->next;
+                }
+                // printf("\n\nCarro %d\n\n", carro->next->placa);
+
                 est->front = aux->next;
                 aux->next->prev = NULL;
-                free(aux);
-                flag = 1; 
+
+                // free(carro);
             }
             if(est->rear == aux){
                 aux->prev->next = NULL;
@@ -331,9 +355,19 @@ void relatorio(Estacionamento* est) {
     }
 }
 
+int deslocamento(Estacionamento* est, Carro* carro) {
+    Carro* aux = carro;
+    int qtd=0;
+    while(true) {   
+        qtd++;
+        if(aux == est->rear){
+            break;
+        }
+        aux = aux->next;
+    };
 
-
-
+    return qtd;
+}
 
 
 
