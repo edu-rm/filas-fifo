@@ -80,8 +80,10 @@ int main (){
     imprimeEstacionamento(est);
 
     partida(est, espera, 1);
+    // partida(est, espera, 3);
 
-    // partida(est, espera, 4);
+
+    // partida(est, espera, 20);
 
     relatorio(est);
     imprimeEstacionamento(est);
@@ -206,6 +208,7 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
     carro = est->front;
     bool estacionado;
     for(int i = 0; i < est->size; i++){
+        printf("%d", carro->placa);
         if(carro->placa == placa) {
             printf("\n\nO carro está no estacionamento\n\n");
             estacionado=true;
@@ -216,10 +219,11 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
 
 
     if(estacionado){
-        printf("Entrei");
+        printf("\nEntrei\n");
         int flag = 0;
-        Carro* aux = 
-        aux = est->front;
+        Carro* aux ;
+        aux = carro;
+        int flag = 0;
 
         while(flag == 0){
             if(aux == carro) {
@@ -258,13 +262,20 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
                 }
                 est->size--;
             }else{
+                if(aux == NULL){
+                    flag= 1;
+                }
                 aux = aux->next;
             }
         }
     }else {
-        // contar um na quantidade de desolcamento 
-        carro->qtdDeslocamento++;
-        printf("Entrei aqui");
+        printf("estou aqui");
+        if(carro == NULL) {
+            printf("O carro n existe");
+        }else {
+            carro->qtdDeslocamento++;
+        }
+
 
     }
 
@@ -301,3 +312,29 @@ void relatorio(Estacionamento* est) {
 
     //     int flag = 0;
     // }
+
+    // while(aux != NULL) {
+        //     if(flag == 0) {
+        //         if(est->rear != aux && est->front != aux){
+
+        //         }else {
+        //             if(est->front == aux){
+        //                 aux->qtdDeslocamento++;
+        //                 aux->next->prev = NULL;
+        //                 est->front = aux->next;
+        //                 // free(aux);
+
+        //             }
+        //             if (est->rear == aux){
+        //                 aux->prev->next = NULL;
+        //                 aux->qtdDeslocamento++;
+        //                 Carro* salvaAux = aux;
+        //                 est->rear = aux->prev;
+        //             }
+        //         }
+
+        //         flag =1;
+        //     }
+
+        //     aux = aux->prev;
+        // }
