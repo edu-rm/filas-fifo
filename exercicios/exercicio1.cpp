@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 
 typedef struct sEspera{
@@ -93,29 +92,29 @@ int main (){
     carro = novoCarro(9);
     adicionarCarroEstacionamento(est, carro, espera );
 
-    // carro = novoCarro(10);
-    // adicionarCarroEstacionamento(est, carro, espera );
+    carro = novoCarro(10);
+    adicionarCarroEstacionamento(est, carro, espera );
 
-    // carro = novoCarro(11);
-    // adicionarCarroEstacionamento(est, carro, espera );
+    carro = novoCarro(11);
+    adicionarCarroEstacionamento(est, carro, espera );
 
     imprimeEstacionamento(est);
 
-    // partida(est, espera, 4);
+    partida(est, espera, 4);
     // partida(est, espera, 9);
 
     // partida(est, espera, 10);
     // partida(est, espera, 11);
 
 
-    partida(est, espera, 9);
+    // partida(est, espera, 9);
 
 
     // partida(est, espera, 20);
 
     relatorio(est);
     imprimeEstacionamento(est);
-    // imprimeEspera(espera);
+    imprimeEspera(espera);
 
     return 0;
 }
@@ -158,7 +157,8 @@ void adicionarCarroEstacionamento(Estacionamento *est, Carro* carro, Espera* esp
             printf("\nEle foi estacionado na posição 1\n");
         }else{
             if (est->size == 1){
-                carro->prev = est->front;
+                // carro->prev = est->front;
+                est->front = carro;
                 est->front->next = carro;
                 carro->next = NULL;
                 est->rear = carro;
@@ -315,6 +315,12 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
         }
         est->size--;
 
+        if(espera->rear != NULL){
+            Carro* carroEspera = novoCarro(espera->rear->placa);
+            // carroEspera->placa = espera->front->placa;
+
+            adicionarCarroEstacionamento(est,carroEspera,espera);
+            printf("%d", espera->front->placa);
     }else {
         bool esperando = false;
         Carro * carro2 ;
@@ -331,18 +337,12 @@ void partida(Estacionamento* est, Espera* espera, int placa ){
 
         if(esperando) {
 
-            if(est->size != 10){
-                adicionarCarroEstacionamento(est, carro2, espera);
-            }else{
-                carro2->qtdDeslocamento++;
-            }
-
         }else {
             printf("\nO carro %d n existe\n", placa);
         }
 
     }
-
+    }
 }
 
 void relatorio(Estacionamento* est) {
@@ -368,49 +368,3 @@ int deslocamento(Estacionamento* est, Carro* carro) {
 
     return qtd;
 }
-
-
-
-
-
-    // while(flag==0){
-    //     char acao;
-
-    //     int placa;
-    //     printf("\nc = chegada | p = partida\n");
-    //     scanf("%c", &acao);
-    //     printf("\nDigite a placa\n");
-
-    //     scanf("%d", &placa);
-
-    //     chegada(est, placa);
-
-    //     int flag = 0;
-    // }
-
-    // while(aux != NULL) {
-        //     if(flag == 0) {
-        //         if(est->rear != aux && est->front != aux){
-
-        //         }else {
-        //             if(est->front == aux){
-        //                 aux->qtdDeslocamento++;
-        //                 aux->next->prev = NULL;
-        //                 est->front = aux->next;
-        //                 // free(aux);
-
-        //             }
-        //             if (est->rear == aux){
-        //                 aux->prev->next = NULL;
-        //                 aux->qtdDeslocamento++;
-        //                 Carro* salvaAux = aux;
-        //                 est->rear = aux->prev;
-        //             }
-        //         }
-
-        //         flag =1;
-        //     }
-
-        //     aux = aux->prev;
-        // }
-        //teste
